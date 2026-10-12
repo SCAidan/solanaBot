@@ -1,0 +1,22 @@
+services:
+  scanner:
+    build: .
+    restart: unless-stopped
+    environment:
+      BOT_DB: /app/data/bot.sqlite3
+      PAPER_CAPITAL: '500'
+    volumes:
+      - botdata:/app/data
+  dashboard:
+    build: .
+    restart: unless-stopped
+    command: uvicorn bot.dashboard:app --host 0.0.0.0 --port 8000
+    environment:
+      BOT_DB: /app/data/bot.sqlite3
+      PAPER_CAPITAL: '500'
+    volumes:
+      - botdata:/app/data
+    ports:
+      - '127.0.0.1:8000:8000'
+volumes:
+  botdata:
